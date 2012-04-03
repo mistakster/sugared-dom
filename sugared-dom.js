@@ -2,26 +2,32 @@ var el = (function () {
 
 	var doc = document;
 
+	var toString = Object.prototype.toString;
+
 	var directProperties = {
-		'class':'className',
-		className:'className',
-		defaultValue:'defaultValue',
-		'for':'htmlFor',
-		html:'innerHTML',
-		text:'textContent',
-		value:'value'
+		'class': 'className',
+		'className': 'className',
+		'defaultValue': 'defaultValue',
+		'for': 'htmlFor',
+		'html': 'innerHTML',
+		'text': 'textContent',
+		'value': 'value'
 	};
 
 	var booleanProperties = {
-		checked:1,
-		defaultChecked:1,
-		disabled:1,
-		multiple:1,
-		selected:1
+		'checked': 1,
+		'defaultChecked': 1,
+		'disabled': 1,
+		'multiple': 1,
+		'selected': 1
 	};
 
+	function isArray(obj) {
+		return toString.apply(obj) === "[object Array]";
+	}
+
 	var setProperty = function (el, key, value) {
-		var prop = directProperties[ key ];
+		var prop = directProperties[key];
 		if (prop) {
 			el[prop] = (value == null ? '' : '' + value);
 		} else if (booleanProperties[key]) {
@@ -38,7 +44,7 @@ var el = (function () {
 		for (i = 0, l = children.length; i < l; i += 1) {
 			node = children[i];
 			if (node) {
-				if (node instanceof Array) {
+				if (isArray(node)) {
 					appendChildren(el, node);
 				} else {
 					if (typeof node === 'string') {
@@ -50,25 +56,28 @@ var el = (function () {
 		}
 	};
 
-	var splitter = /(#|\.)/;
+	var splitter = /#|\./;
 
 	return function (tag, props, children) {
-		if (props instanceof Array) {
+		if (isArray(props)) {
 			children = props;
 			props = null;
 		}
 
-		var parts, name, el, i, j, l, node, prop;
+		var origin, parts, name, el, i, l, pos, node, prop;
 
 		if (splitter.test(tag)) {
-			parts = tag.split(splitter);
+			origin = tag;
+			parts = origin.split(splitter);
 			tag = parts[0];
 			if (!props) {
 				props = {};
 			}
-			for (i = 1, j = 2, l = parts.length; j < l; i += 2, j += 2) {
-				name = parts[j];
-				if (parts[i] === '#') {
+
+			for (pos = 0, i = 1, l = parts.length; i < l; i++) {
+				name = parts[i];
+				pos = origin.indexOf(name, pos + 1);
+				if (origin.charAt(pos - 1) === "#") {
 					props.id = name;
 				} else {
 					props.className = props.className ?
@@ -89,4 +98,4 @@ var el = (function () {
 		return el;
 	};
 
-}() );
+}());

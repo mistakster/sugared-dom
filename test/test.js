@@ -74,10 +74,10 @@
 		var element;
 
 		element = el("div#test1");
-		equal(element.getAttribute("id"), "test1");
+		equal(element.id, "test1");
 
 		element = el("div#test1#test2");
-		equal(element.getAttribute("id"), "test2");
+		equal(element.id, "test2");
 
 		element = null;
 	});
@@ -87,10 +87,10 @@
 		var element;
 
 		element = el("div.test1");
-		equal(element.getAttribute("class"), "test1");
+		equal(element.className, "test1");
 
 		element = el("div.test1.test2");
-		equal(element.getAttribute("class"), "test1 test2");
+		equal(element.className, "test1 test2");
 
 		element = null;
 	});
@@ -100,16 +100,20 @@
 		var element;
 
 		element = el("div#test1.test2");
-		equal(element.getAttribute("id"), "test1");
-		equal(element.getAttribute("class"), "test2");
+		equal(element.id, "test1");
+		equal(element.className, "test2");
 
 		element = el("div.test1#test2");
-		equal(element.getAttribute("id"), "test2");
-		equal(element.getAttribute("class"), "test1");
+		equal(element.id, "test2");
+		equal(element.className, "test1");
 
 		element = el("div.test1#test2.test3");
-		equal(element.getAttribute("id"), "test2");
-		equal(element.getAttribute("class"), "test1 test3");
+		equal(element.id, "test2");
+		equal(element.className, "test1 test3");
+
+		element = el("div.sugared#sugared.sugared");
+		equal(element.id, "sugared");
+		equal(element.className, "sugared sugared");
 
 		element = null;
 	});
