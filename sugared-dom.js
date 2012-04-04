@@ -27,6 +27,9 @@ var el = (function () {
 	}
 
 	var setProperty = function (el, key, value) {
+		if (key === "style") {
+			throw new Error("Incompatible attribute 'style'");
+		}
 		var prop = directProperties[key];
 		if (prop) {
 			el[prop] = (value == null ? '' : '' + value);

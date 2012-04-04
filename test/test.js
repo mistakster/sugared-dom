@@ -119,4 +119,23 @@
 	});
 
 
+	test("attributes", function () {
+
+		var element;
+
+		element = el("div", {"width": 100});
+		equal(element.getAttribute("width"), "100");
+		equal(element.getAttribute("height"), null);
+
+		element = el("div", {"width": "50%", "height": 50});
+		equal(element.getAttribute("width"), "50%");
+		equal(element.getAttribute("height"), "50");
+
+		raises(function () {
+			el("div", {"style": ""});
+		}, Error, "Incompatible attribute 'style'");
+
+		element = null;
+	});
+
 }());
